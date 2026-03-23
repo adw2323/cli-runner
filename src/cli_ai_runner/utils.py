@@ -6,7 +6,7 @@ import shlex
 import shutil
 from pathlib import Path
 
-from cli_runner.models import RunState
+from cli_ai_runner.models import RunState
 
 # ANSI and Control Character patterns
 _ANSI_RE = re.compile(

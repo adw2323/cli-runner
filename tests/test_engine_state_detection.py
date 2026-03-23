@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from cli_runner.utils import resolve_command as _resolve_command, derive_state_from_output, strip_ansi
-from cli_runner.models import RunState
+from cli_ai_runner.utils import resolve_command as _resolve_command, derive_state_from_output, strip_ansi
+from cli_ai_runner.models import RunState
 
 
 @pytest.mark.parametrize(

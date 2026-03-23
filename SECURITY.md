@@ -12,7 +12,7 @@ Only the latest release is supported with security updates.
 
 We take the security of this project seriously. If you find a security vulnerability, please do NOT report it via a public issue. 
 
-Please report vulnerabilities via the [GitHub Security Advisory](https://github.com/adw2323/cli-runner/security/advisories/new) disclosure process or email the maintainer.
+Please report vulnerabilities via the [GitHub Security Advisory](https://github.com/adw2323/cli-ai-runner/security/advisories/new) disclosure process or email the maintainer.
 
 ### Disclosure Policy
 - We will acknowledge receipt of your report within 48 hours.

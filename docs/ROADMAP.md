@@ -1,4 +1,4 @@
-# cli-runner Roadmap
+# cli-ai-runner Roadmap
 
 ## Recommendation Summary
 - Build v1 as a Windows-first, single-agent CLI runner with explicit adapter support for `codex`, `gemini`, and `claude`.
@@ -8,7 +8,7 @@
 
 ## Scope Guardrails
 - In scope for v1:
-  - `cli-runner --agent <codex|gemini|claude> "<prompt>"`
+  - `cli-ai-runner --agent <codex|gemini|claude> "<prompt>"`
   - Deterministic loop control with machine-readable run status.
   - Windows-first compatibility and tests.
   - Install, doctor checks, and clear failure messages.
@@ -21,9 +21,9 @@
 | Milestone | Goal | Key Deliverables | Exit Criteria |
 |---|---|---|---|
 | M0 (baseline) | Stabilize current core | Existing loop runner, strict completion gate, status parsing, 90%+ coverage | Current tests remain green after refactor prep |
-| M1 | Multi-agent adapter architecture | `--agent` flag, adapter interface, `codex/gemini/claude` adapters, command detection, actionable install/auth errors | `cli-runner --agent X` works for all 3 agents in integration tests |
+| M1 | Multi-agent adapter architecture | `--agent` flag, adapter interface, `codex/gemini/claude` adapters, command detection, actionable install/auth errors | `cli-ai-runner --agent X` works for all 3 agents in integration tests |
 | M2 | Packaging and quality hardening | CI on Windows, PyPI-ready metadata, `doctor` command, release docs | Clean CI on Windows, build artifacts pass package checks |
-| M3 | Public v1 release | GitHub release + PyPI publish + versioned changelog | `pip install cli-runner` works on clean Windows environment |
+| M3 | Public v1 release | GitHub release + PyPI publish + versioned changelog | `pip install cli-ai-runner` works on clean Windows environment |
 | M4 (post-v1) | Multi-agent roadmap | Sequential/parallel strategy doc, prototype command surface | Approved design and prototype spike |
 
 ## v1 Architecture Decisions
@@ -56,12 +56,12 @@
 
 ## Setup and Installation Strategy
 - Distribution:
-  - Publish to PyPI (`cli-runner`) as canonical distribution path.
+  - Publish to PyPI (`cli-ai-runner`) as canonical distribution path.
 - Runtime dependencies:
   - Keep hard runtime dependencies minimal.
   - Keep PTY-related support optional and disabled by default.
 - Setup UX:
-  - Add `cli-runner doctor` to validate:
+  - Add `cli-ai-runner doctor` to validate:
     - Agent executable discovery.
     - Required auth environment variables.
     - Basic command invocation readiness.

@@ -3,8 +3,8 @@ from __future__ import annotations
 import io
 from unittest.mock import MagicMock, patch
 
-from cli_runner.adapters.base import AgentAdapter, InvocationSpec
-from cli_runner.runner import (
+from cli_ai_runner.adapters.base import AgentAdapter, InvocationSpec
+from cli_ai_runner.runner import (
     _completion_check_passes,
     _extract_completion_check,
     _extract_run_status,
@@ -25,7 +25,7 @@ class MockAdapter(AgentAdapter):
 
 def test_run_task_loop_done_status_single_run() -> None:
     with patch(
-        "cli_runner.runner._run_agent_once",
+        "cli_ai_runner.runner._run_agent_once",
         return_value=(0, "work complete\nRUN_STATUS:DONE\n"),
     ) as run_once_mock:
         result = run_task_loop("do work", adapter=MockAdapter(), max_loops=4, strict_completion=False)
@@ -37,7 +37,7 @@ def test_run_task_loop_done_status_single_run() -> None:
 
 def test_run_task_loop_continue_then_done() -> None:
     with patch(
-        "cli_runner.runner._run_agent_once",
+        "cli_ai_runner.runner._run_agent_once",
         side_effect=[(0, "RUN_STATUS:CONTINUE\n"), (0, "RUN_STATUS:DONE\n")],
     ):
         result = run_task_loop("do work", adapter=MockAdapter(), max_loops=4, strict_completion=False)
@@ -46,13 +46,13 @@ def test_run_task_loop_continue_then_done() -> None:
     assert result.return_code == 0
 
 def test_run_task_loop_rework_returns_nonzero() -> None:
-    with patch("cli_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:REWORK\n")):
+    with patch("cli_ai_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:REWORK\n")):
         result = run_task_loop("do work", adapter=MockAdapter(), max_loops=4, strict_completion=False)
     assert result.status == "rework"
     assert result.return_code == 2
 
 def test_run_task_loop_hits_loop_limit() -> None:
-    with patch("cli_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:CONTINUE\n")):
+    with patch("cli_ai_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:CONTINUE\n")):
         result = run_task_loop("do work", adapter=MockAdapter(), max_loops=2, strict_completion=False)
     assert result.status == "continue"
     assert result.loops == 2
@@ -62,7 +62,7 @@ def test_run_task_loop_resolves_command_before_execution() -> None:
     adapter = MockAdapter()
     with (
         patch.object(adapter, "resolve_cmd", return_value=["C:\\tools\\codex.cmd", "exec"]) as resolve_mock,
-        patch("cli_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:DONE\n")) as run_once_mock,
+        patch("cli_ai_runner.runner._run_agent_once", return_value=(0, "RUN_STATUS:DONE\n")) as run_once_mock,
     ):
         result = run_task_loop("do work", adapter=adapter, max_loops=2, strict_completion=False)
     assert result.status == "done"
@@ -84,7 +84,7 @@ def test_run_agent_once_uses_utf8_with_replacement() -> None:
     proc.stdout = io.StringIO("RUN_STATUS:DONE\n")
     proc.wait.return_value = 0
     spec = InvocationSpec(argv=["codex.cmd", "exec", "task"], env_overrides={})
-    with patch("cli_runner.runner.subprocess.Popen", return_value=proc) as popen_mock:
+    with patch("cli_ai_runner.runner.subprocess.Popen", return_value=proc) as popen_mock:
         rc, output = _run_agent_once(spec)
     assert rc == 0
     assert "RUN_STATUS:DONE" in output
@@ -94,7 +94,7 @@ def test_run_agent_once_uses_utf8_with_replacement() -> None:
 
 def test_run_task_loop_strict_completion_requires_second_done_pass() -> None:
     with patch(
-        "cli_runner.runner._run_agent_once",
+        "cli_ai_runner.runner._run_agent_once",
         side_effect=[
             (0, "RUN_STATUS:DONE\n"),
             (
@@ -103,7 +103,7 @@ def test_run_task_loop_strict_completion_requires_second_done_pass() -> None:
             ),
         ],
     ) as run_once_mock:
-        with patch("cli_runner.runner._discover_completion_targets", return_value=CompletionTargets([], [])):
+        with patch("cli_ai_runner.runner._discover_completion_targets", return_value=CompletionTargets([], [])):
             result = run_task_loop("finish project", adapter=MockAdapter(), max_loops=4, strict_completion=True)
     assert result.status == "done"
     assert result.loops == 2
@@ -112,10 +112,10 @@ def test_run_task_loop_strict_completion_requires_second_done_pass() -> None:
 
 def test_run_task_loop_strict_completion_falls_back_to_continue_when_not_verified() -> None:
     with patch(
-        "cli_runner.runner._run_agent_once",
+        "cli_ai_runner.runner._run_agent_once",
         side_effect=[(0, "RUN_STATUS:DONE\n"), (0, "RUN_STATUS:DONE\n"), (0, "RUN_STATUS:CONTINUE\n")],
     ):
-        with patch("cli_runner.runner._discover_completion_targets", return_value=CompletionTargets([], [])):
+        with patch("cli_ai_runner.runner._discover_completion_targets", return_value=CompletionTargets([], [])):
             result = run_task_loop("finish project", adapter=MockAdapter(), max_loops=3, strict_completion=True)
     assert result.status == "continue"
     assert result.loops == 3

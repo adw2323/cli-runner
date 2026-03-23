@@ -1,19 +1,19 @@
 from __future__ import annotations
 import os
 from unittest.mock import patch
-from cli_runner.adapters.codex import CodexAdapter
+from cli_ai_runner.adapters.codex import CodexAdapter
 
 def test_codex_adapter_resolve_cmd_default():
     adapter = CodexAdapter()
-    with patch("cli_runner.adapters.codex.resolve_command", return_value=["C:\\bin\\codex.cmd"]):
-        with patch("cli_runner.adapters.codex.shutil.which", return_value="C:\\bin\\codex.cmd"):
+    with patch("cli_ai_runner.adapters.codex.resolve_command", return_value=["C:\\bin\\codex.cmd"]):
+        with patch("cli_ai_runner.adapters.codex.shutil.which", return_value="C:\\bin\\codex.cmd"):
             cmd = adapter.resolve_cmd()
             assert cmd == ["C:\\bin\\codex.cmd", "exec"]
 
 def test_codex_adapter_resolve_cmd_env_override(monkeypatch):
     monkeypatch.setenv("CODEX_RUNNER_CMD", "custom-codex")
     adapter = CodexAdapter()
-    with patch("cli_runner.adapters.codex.resolve_command", return_value=["C:\\bin\\custom-codex"]):
+    with patch("cli_ai_runner.adapters.codex.resolve_command", return_value=["C:\\bin\\custom-codex"]):
         cmd = adapter.resolve_cmd()
         assert cmd == ["C:\\bin\\custom-codex"]
 

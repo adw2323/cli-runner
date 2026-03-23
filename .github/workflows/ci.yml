@@ -28,5 +28,5 @@ jobs:
         
     - name: Run tests with coverage
       run: |
-        pytest --cov=src/cli_runner --cov-report=term-missing --cov-fail-under=85
+        pytest --cov=src/cli_ai_runner --cov-report=term-missing --cov-fail-under=85
       shell: pwsh

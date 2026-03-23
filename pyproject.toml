@@ -3,13 +3,13 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cli-runner"
+name = "cli-ai-runner"
 version = "1.0.0"
 description = "Agent-agnostic CLI runner with loop control for Codex, Gemini, and Claude."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-  {name = "cli-runner Contributors"}
+  {name = "cli-ai-runner Contributors"}
 ]
 requires-python = ">=3.11"
 dependencies = [
@@ -25,7 +25,7 @@ dev = [
 ]
 
 [project.scripts]
-cli-runner = "cli_runner.main:main"
+cli-ai-runner = "cli_ai_runner.main:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -36,4 +36,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-addopts = "--cov=src/cli_runner --cov-report=term-missing --cov-fail-under=85"
+addopts = "--cov=src/cli_ai_runner --cov-report=term-missing --cov-fail-under=85"

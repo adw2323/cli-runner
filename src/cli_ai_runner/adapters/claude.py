@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from cli_runner.adapters.base import AgentAdapter, InvocationSpec
-from cli_runner.utils import resolve_command
+from cli_ai_runner.adapters.base import AgentAdapter, InvocationSpec
+from cli_ai_runner.utils import resolve_command
 
 import shutil
 import subprocess

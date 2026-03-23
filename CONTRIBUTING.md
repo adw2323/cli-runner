@@ -1,13 +1,13 @@
-# Contributing to cli-runner
+# Contributing to cli-ai-runner
 
-Welcome! We are excited that you want to help improve `cli-runner`.
+Welcome! We are excited that you want to help improve `cli-ai-runner`.
 
 ## Local Development Setup
 
 1.  **Clone the repository:**
     ```powershell
-    git clone https://github.com/adw2323/cli-runner.git
-    cd cli-runner
+    git clone https://github.com/adw2323/cli-ai-runner.git
+    cd cli-ai-runner
     ```
 
 2.  **Create a virtual environment:**
@@ -30,13 +30,13 @@ We use `pytest` for our test suite. All PRs must pass the test suite with at lea
 pytest
 
 # Run with coverage report
-pytest --cov=src/cli_runner --cov-report=term-missing
+pytest --cov=src/cli_ai_runner --cov-report=term-missing
 ```
 
 ## Project Structure
 
-- `src/cli_runner/`: Core logic.
-- `src/cli_runner/adapters/`: Agent-specific invocation strategies.
+- `src/cli_ai_runner/`: Core logic.
+- `src/cli_ai_runner/adapters/`: Agent-specific invocation strategies.
 - `tests/`: Comprehensive test suite.
 - `docs/`: User and architectural documentation.
 

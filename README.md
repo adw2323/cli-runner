@@ -1,12 +1,12 @@
-# cli-runner
+# cli-ai-runner
 
 **The Deterministic Task Execution Engine for Agentic CLIs.**
 
-`cli-runner` provides a professional, stable wrapper for running AI agents like Codex, Claude, and Gemini in automated loops. It solves the "completion problem" by enforcing a structured protocol between the human, the runner, and the AI.
+`cli-ai-runner` provides a professional, stable wrapper for running AI agents like Codex, Claude, and Gemini in automated loops. It solves the "completion problem" by enforcing a structured protocol between the human, the runner, and the AI.
 
 ---
 
-## 🚀 Why cli-runner?
+## 🚀 Why cli-ai-runner?
 
 *   **Deterministic Control:** Stop guessing if an agent finished. Rely on explicit `RUN_STATUS` signals.
 *   **Multi-Agent Support:** Swappable adapters for the industry's leading agentic CLIs.
@@ -17,10 +17,10 @@
 
 ## 🛠 Installation
 
-`cli-runner` is distributed via PyPI and requires Python 3.11+.
+`cli-ai-runner` is distributed via PyPI and requires Python 3.11+.
 
 ```powershell
-pip install cli-runner
+pip install cli-ai-runner
 ```
 
 ---
@@ -30,19 +30,19 @@ pip install cli-runner
 ### 1. Check your environment
 See which agents are ready to work:
 ```powershell
-cli-runner status
+cli-ai-runner status
 ```
 
 ### 2. Setup missing agents
 Automatically provision the necessary agent CLIs:
 ```powershell
-cli-runner setup --yes
+cli-ai-runner setup --yes
 ```
 
 ### 3. Run a project task
 Execute a task with automatic continuation and verification:
 ```powershell
-cli-runner "Implement the login module and add unit tests" --agent claude
+cli-ai-runner "Implement the login module and add unit tests" --agent claude
 ```
 
 ---
@@ -59,9 +59,9 @@ cli-runner "Implement the login module and add unit tests" --agent claude
 
 | Command | Usage | Description |
 | ------- | ----- | ----------- |
-| `run` | `cli-runner run "task" [options]` | **Primary command.** Starts a task loop. |
-| `status` | `cli-runner status` | Lists detected agents and their binary paths. |
-| `setup` | `cli-runner setup [--agent X]` | Installs missing agent binaries via NPM. |
+| `run` | `cli-ai-runner run "task" [options]` | **Primary command.** Starts a task loop. |
+| `status` | `cli-ai-runner status` | Lists detected agents and their binary paths. |
+| `setup` | `cli-ai-runner setup [--agent X]` | Installs missing agent binaries via NPM. |
 
 ### Global Options for `run`:
 - `--agent {codex,gemini,claude}`: Which adapter to use. (Default: `codex`)

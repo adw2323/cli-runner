@@ -4,12 +4,12 @@ import os
 
 import pytest
 
-from cli_runner import utils
-from cli_runner.utils import resolve_command as _resolve_command
+from cli_ai_runner import utils
+from cli_ai_runner.utils import resolve_command as _resolve_command
 
 
 def test_resolve_command_uses_shutil_which(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("cli_runner.utils.shutil.which", lambda program: "C:\\x\\tool.cmd")
+    monkeypatch.setattr("cli_ai_runner.utils.shutil.which", lambda program: "C:\\x\\tool.cmd")
     resolved = _resolve_command(["tool", "--x"])
     assert resolved[0] == "C:\\x\\tool.cmd"
     assert resolved[1:] == ["--x"]
@@ -25,7 +25,7 @@ def test_resolve_command_windows_extension_fallback(monkeypatch: pytest.MonkeyPa
             return "C:\\tools\\tool.cmd"
         return None
 
-    monkeypatch.setattr("cli_runner.utils.shutil.which", fake_which)
+    monkeypatch.setattr("cli_ai_runner.utils.shutil.which", fake_which)
     resolved = _resolve_command(["tool"])
     assert resolved[0].lower().endswith("tool.cmd")
     assert any(item.lower().endswith("tool.cmd") for item in calls)
@@ -38,7 +38,7 @@ def test_resolve_command_windows_dotted_command_uses_direct_which(monkeypatch: p
             return "C:\\Users\\andrew.walsh\\AppData\\Roaming\\npm\\codex.exe"
         return None
 
-    monkeypatch.setattr("cli_runner.utils.shutil.which", fake_which)
+    monkeypatch.setattr("cli_ai_runner.utils.shutil.which", fake_which)
     resolved = _resolve_command(["codex.exe", "exec"])
     assert resolved[0].lower().endswith("codex.exe")
     assert resolved[1:] == ["exec"]
@@ -54,7 +54,7 @@ def test_resolve_command_windows_prefers_cmd_over_extensionless_and_exe(monkeypa
         }
         return mapping.get(program.lower())
 
-    monkeypatch.setattr("cli_runner.utils.shutil.which", fake_which)
+    monkeypatch.setattr("cli_ai_runner.utils.shutil.which", fake_which)
     resolved = _resolve_command(["codex", "exec"])
     assert resolved[0].lower().endswith("codex.cmd")
     assert resolved[1:] == ["exec"]

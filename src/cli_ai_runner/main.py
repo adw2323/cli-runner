@@ -4,8 +4,8 @@ import argparse
 import os
 import sys
 
-from cli_runner.adapters import get_adapter
-from cli_runner.runner import run_task_loop
+from cli_ai_runner.adapters import get_adapter
+from cli_ai_runner.runner import run_task_loop
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -15,7 +15,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return raw.strip().lower() not in {"0", "false", "no", "off"}
 
 
-from cli_runner.setup_agent import run_setup, run_status
+from cli_ai_runner.setup_agent import run_setup, run_status
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -47,13 +47,13 @@ def _build_parser() -> argparse.ArgumentParser:
     # Fallback to 'run' if no subcommand provided (backward compatibility)
     parser.set_defaults(command="run")
     
-    # We also want to support 'cli-runner "task text"' directly without 'run'
+    # We also want to support 'cli-ai-runner "task text"' directly without 'run'
     # This is tricky with subparsers, so we'll handle it in main()
     return parser
 
 
 def main() -> int:
-    # Special handling for legacy/simple usage: cli-runner "task text"
+    # Special handling for legacy/simple usage: cli-ai-runner "task text"
     # If the first argument isn't a known command, assume it's a task.
     raw_args = sys.argv[1:]
     known_cmds = {"run", "setup", "status", "-h", "--help", "--version"}

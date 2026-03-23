@@ -3,15 +3,15 @@ from __future__ import annotations
 from io import StringIO
 from unittest.mock import patch, MagicMock
 
-from cli_runner.main import main
-from cli_runner.runner import RunnerResult
+from cli_ai_runner.main import main
+from cli_ai_runner.runner import RunnerResult
 
 
 def test_main_cli_calls_runner() -> None:
     # Test 'run' subcommand explicitly
     with patch("sys.argv", ["prog", "run", "ship", "it"]):
         with patch(
-            "cli_runner.main.run_task_loop",
+            "cli_ai_runner.main.run_task_loop",
             return_value=RunnerResult(status="done", loops=1, return_code=0),
         ) as run_mock:
             assert main() == 0
@@ -30,7 +30,7 @@ def test_main_cli_requires_task() -> None:
 def test_main_cli_no_strict_completion_flag() -> None:
     with patch("sys.argv", ["prog", "run", "--no-strict-completion", "ship", "it"]):
         with patch(
-            "cli_runner.main.run_task_loop",
+            "cli_ai_runner.main.run_task_loop",
             return_value=RunnerResult(status="done", loops=1, return_code=0),
         ) as run_mock:
             assert main() == 0
@@ -39,6 +39,6 @@ def test_main_cli_no_strict_completion_flag() -> None:
 
 def test_main_cli_status_subcommand() -> None:
     with patch("sys.argv", ["prog", "status"]):
-        with patch("cli_runner.main.run_status", return_value=0) as status_mock:
+        with patch("cli_ai_runner.main.run_status", return_value=0) as status_mock:
             assert main() == 0
     status_mock.assert_called_once()

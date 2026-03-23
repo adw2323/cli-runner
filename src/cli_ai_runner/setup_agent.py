@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from cli_runner.adapters import REGISTRY, get_adapter
+from cli_ai_runner.adapters import REGISTRY, get_adapter
 
 def run_status() -> int:
     """Print the installation status of all agents."""
