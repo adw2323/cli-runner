@@ -3,6 +3,9 @@ from __future__ import annotations
 from cli_runner.adapters.base import AgentAdapter, InvocationSpec
 from cli_runner.utils import resolve_command
 
+import shutil
+import subprocess
+
 class GeminiAdapter(AgentAdapter):
     @property
     def name(self) -> str:
@@ -19,8 +22,18 @@ class GeminiAdapter(AgentAdapter):
         )
 
     def is_installed(self) -> bool:
-        return self.resolve_cmd() is not None
+        cmd = resolve_command(["gemini"])
+        return bool(cmd and shutil.which(cmd[0]))
 
     def install(self, dry_run: bool = False) -> bool:
-        print("Would install gemini using: npm install -g @google/gemini-cli")
-        return True
+        cmd = ["npm", "install", "-g", "@google/gemini-cli"]
+        if dry_run:
+            print(f"Would run: {' '.join(cmd)}")
+            return True
+        
+        print(f"Running: {' '.join(cmd)}")
+        try:
+            subprocess.run(cmd, check=True, shell=True)
+            return True
+        except subprocess.CalledProcessError:
+            return False
