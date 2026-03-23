@@ -30,6 +30,9 @@ codex-runner "continue working on the project"
 - `--strict-completion` / `--no-strict-completion` (default on, or `RUNNER_STRICT_COMPLETION`)
 - `--codex-cmd` (default `codex exec`, or `CODEX_RUNNER_CMD`)
 
+## Roadmap
+- See [docs/ROADMAP.md](docs/ROADMAP.md) for the consolidated project plan.
+
 ## Test
 ```powershell
 python -m pytest
