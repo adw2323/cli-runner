@@ -11,7 +11,6 @@ All notable changes to this project will be documented in this file.
 - `cli-runner setup` command for automated agent CLI installation.
 - GitHub Actions CI for Windows with Python 3.11/3.12.
 - PyPI release workflow using trusted publishers (OIDC).
-- Integration with Codex Memory (Azure) bridge.
 
 ### Changed
 - Renamed project from `cli-orchestrator-ui` to `cli-runner`.

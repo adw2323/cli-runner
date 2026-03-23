@@ -57,8 +57,6 @@ You can customize behavior without CLI flags:
 | -------- | ----------- | ------- |
 | `RUNNER_MAX_LOOPS` | Max iterations per task | `50` |
 | `RUNNER_STRICT_COMPLETION` | Toggle strict gating | `True` |
-| `CODEXMEM_ENABLED` | Enable Azure Memory Bridge | `False` |
-| `CODEXMEM_REPO_ID` | Project identifier for memory | `default` |
 
 ### Custom Codex Commands
 If you use a specific wrapper for Codex, use `CODEX_RUNNER_CMD`:

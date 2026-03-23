@@ -12,7 +12,6 @@
 *   **Multi-Agent Support:** Swappable adapters for the industry's leading agentic CLIs.
 *   **Strict Completion Gating:** Automated verification against your project's Roadmap and Test suites before claiming victory.
 *   **Windows-First Reliability:** Deep integration with Windows command resolution and PTY handling.
-*   **Enterprise Memory:** Optional integration with Azure Codex Memory for persistent project history.
 
 ---
 
