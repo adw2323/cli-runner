@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from cli_runner.broker.codexmem import CodexMemBridge
+from cli_runner.codexmem import CodexMemBridge
 
 
 class _Result:
@@ -42,7 +42,7 @@ async def test_load_recent_lines_filters_repo_and_formats(monkeypatch: pytest.Mo
     def _run(*_args, **_kwargs):
         return _Result(0, json.dumps(payload))
 
-    monkeypatch.setattr("cli_runner.broker.codexmem.subprocess.run", _run)
+    monkeypatch.setattr("cli_runner.codexmem.subprocess.run", _run)
     bridge = CodexMemBridge(
         cwd=Path("C:\\Users\\andrew.walsh\\cli-runner"),
         repo_id="cli-runner",
@@ -56,7 +56,7 @@ async def test_load_recent_lines_filters_repo_and_formats(monkeypatch: pytest.Mo
 @pytest.mark.asyncio
 async def test_add_run_invokes_cli(monkeypatch: pytest.MonkeyPatch) -> None:
     spy = Mock(return_value=_Result(0, json.dumps({"ok": True})))
-    monkeypatch.setattr("cli_runner.broker.codexmem.subprocess.run", spy)
+    monkeypatch.setattr("cli_runner.codexmem.subprocess.run", spy)
     bridge = CodexMemBridge(
         cwd=Path("C:\\Users\\andrew.walsh\\cli-runner"),
         repo_id="cli-runner",
@@ -100,7 +100,7 @@ def test_queue_add_run_no_event_loop_noop(monkeypatch: pytest.MonkeyPatch) -> No
         cwd=Path("C:\\Users\\andrew.walsh\\cli-runner"),
         repo_id="cli-runner",
     )
-    monkeypatch.setattr("cli_runner.broker.codexmem.asyncio.get_running_loop", Mock(side_effect=RuntimeError()))
+    monkeypatch.setattr("cli_runner.codexmem.asyncio.get_running_loop", Mock(side_effect=RuntimeError()))
     bridge.queue_add_run(request="x", summary="y", status="running")
 
 
@@ -120,7 +120,7 @@ def test_queue_add_run_schedules_task(monkeypatch: pytest.MonkeyPatch) -> None:
     )
     created = Mock()
     fake_loop = Mock(create_task=created)
-    monkeypatch.setattr("cli_runner.broker.codexmem.asyncio.get_running_loop", Mock(return_value=fake_loop))
+    monkeypatch.setattr("cli_runner.codexmem.asyncio.get_running_loop", Mock(return_value=fake_loop))
     bridge.queue_add_run(request="x", summary="y", status="running")
     assert created.call_count == 1
     created.call_args.args[0].close()
@@ -149,13 +149,13 @@ async def test_run_cli_json_handles_error_and_invalid_output(monkeypatch: pytest
     def raise_run(*_args, **_kwargs):
         raise OSError("boom")
 
-    monkeypatch.setattr("cli_runner.broker.codexmem.subprocess.run", raise_run)
+    monkeypatch.setattr("cli_runner.codexmem.subprocess.run", raise_run)
     assert await bridge._run_cli_json(["journal-list"]) is None
 
-    monkeypatch.setattr("cli_runner.broker.codexmem.subprocess.run", Mock(return_value=_Result(1, "{}")))
+    monkeypatch.setattr("cli_runner.codexmem.subprocess.run", Mock(return_value=_Result(1, "{}")))
     assert await bridge._run_cli_json(["journal-list"]) is None
 
-    monkeypatch.setattr("cli_runner.broker.codexmem.subprocess.run", Mock(return_value=_Result(0, "not-json")))
+    monkeypatch.setattr("cli_runner.codexmem.subprocess.run", Mock(return_value=_Result(0, "not-json")))
     assert await bridge._run_cli_json(["journal-list"]) is None
 
 

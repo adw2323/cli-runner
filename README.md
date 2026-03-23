@@ -1,80 +1,80 @@
 # cli-runner
 
-Agent-agnostic CLI runner with deterministic loop control and status gating for Codex, Gemini, and Claude.
+**The Deterministic Task Execution Engine for Agentic CLIs.**
 
-## Features
+`cli-runner` provides a professional, stable wrapper for running AI agents like Codex, Claude, and Gemini in automated loops. It solves the "completion problem" by enforcing a structured protocol between the human, the runner, and the AI.
 
-- **Multi-Agent Support:** Built-in adapters for `codex`, `gemini`, and `claude`.
-- **Deterministic Loop Control:** Automatically continues or reworks tasks based on agent output (`RUN_STATUS:DONE|CONTINUE|REWORK`).
-- **Strict Completion Gating:** Before accepting `DONE`, verifies work against roadmaps, todos, and tests.
-- **Windows-First:** Robust command resolution for `.cmd`, `.bat`, and `.exe` on Windows.
-- **Auto-Setup:** Built-in `status` and `setup` commands to detect and install missing agent CLIs.
-- **Memory-First:** Integrated with Codex Memory (Azure) for session tracking and persistence.
+---
 
-## Quick Start
+## 🚀 Why cli-runner?
 
-### 1. Install
+*   **Deterministic Control:** Stop guessing if an agent finished. Rely on explicit `RUN_STATUS` signals.
+*   **Multi-Agent Support:** Swappable adapters for the industry's leading agentic CLIs.
+*   **Strict Completion Gating:** Automated verification against your project's Roadmap and Test suites before claiming victory.
+*   **Windows-First Reliability:** Deep integration with Windows command resolution and PTY handling.
+*   **Enterprise Memory:** Optional integration with Azure Codex Memory for persistent project history.
+
+---
+
+## 🛠 Installation
+
+`cli-runner` is distributed via PyPI and requires Python 3.11+.
 
 ```powershell
 pip install cli-runner
 ```
 
-### 2. Check Status
+---
 
-Detect installed agents and their paths:
+## 🏁 Quick Start
 
+### 1. Check your environment
+See which agents are ready to work:
 ```powershell
 cli-runner status
 ```
 
-### 3. Setup Agents
-
-Install missing agents automatically:
-
+### 2. Setup missing agents
+Automatically provision the necessary agent CLIs:
 ```powershell
-cli-runner setup --agent all
+cli-runner setup --yes
 ```
 
-### 4. Run a Task
-
-Run a task loop using your preferred agent:
-
+### 3. Run a project task
+Execute a task with automatic continuation and verification:
 ```powershell
-# Default (Codex)
-cli-runner "implement the user authentication module"
-
-# Using Claude
-cli-runner --agent claude "refactor the data layer"
-
-# Using Gemini
-cli-runner --agent gemini "add unit tests for the broker"
+cli-runner "Implement the login module and add unit tests" --agent claude
 ```
 
-## CLI Reference
+---
 
-### Commands
+## 📖 Documentation
 
-- `cli-runner status`: Print detected agents and their versions.
-- `cli-runner setup`: Detect and install missing agents.
-  - `--agent {all,codex,gemini,claude}` (default: `all`)
-  - `--yes`, `-y`: Skip confirmation.
-  - `--dry-run`: Show commands without running them.
-- `cli-runner run` (or just `cli-runner`): Run a task loop.
-  - `--agent {codex,gemini,claude}` (default: `codex`)
-  - `--max-loops N`: Maximum number of loops (default: 50).
-  - `--strict-completion` / `--no-strict-completion`: Require a verification pass before `DONE`.
+*   **[User Guide](docs/USER_GUIDE.md):** Detailed command references, environment variables, and troubleshooting.
+*   **[Architecture](docs/ARCHITECTURE.md):** Deep dive into the adapter pattern and deterministic loop logic.
+*   **[Roadmap](docs/ROADMAP.md):** Future plans for multi-agent orchestration and cross-platform support.
 
-## Environment Variables
+---
 
-- `RUNNER_MAX_LOOPS`: Default loop cap.
-- `RUNNER_STRICT_COMPLETION`: Toggle strict completion gating (1/0).
-- `CODEXMEM_ENABLED`: Toggle Codex Memory bridge (1/0).
-- `CODEXMEM_REPO_ID`: Current repository identifier for memory logging.
+## ⌨️ CLI Command Reference
 
-## Contributing
+| Command | Usage | Description |
+| ------- | ----- | ----------- |
+| `run` | `cli-runner run "task" [options]` | **Primary command.** Starts a task loop. |
+| `status` | `cli-runner status` | Lists detected agents and their binary paths. |
+| `setup` | `cli-runner setup [--agent X]` | Installs missing agent binaries via NPM. |
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/ROADMAP.md](docs/ROADMAP.md) for project details.
+### Global Options for `run`:
+- `--agent {codex,gemini,claude}`: Which adapter to use. (Default: `codex`)
+- `--max-loops N`: Exit after N iterations to prevent runaway costs. (Default: `50`)
+- `--no-strict-completion`: Disable the mandatory verification pass.
 
-## License
+---
 
-MIT
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for local development setup and testing guidelines.
+
+## ⚖️ License
+
+Distributed under the **MIT License**. See `LICENSE` for more information.

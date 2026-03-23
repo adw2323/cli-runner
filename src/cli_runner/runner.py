@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from cli_runner.adapters.base import AgentAdapter, InvocationSpec
-from cli_runner.broker.codexmem import CodexMemBridge
-from cli_runner.broker.models import RunState
+from cli_runner.codexmem import CodexMemBridge
+from cli_runner.models import RunState
 from cli_runner.utils import derive_state_from_output, strip_ansi
 
 _RUN_STATUS_RE = re.compile(r"^\s*run_status\s*:\s*(done|continue|rework)\s*$", re.IGNORECASE | re.MULTILINE)
