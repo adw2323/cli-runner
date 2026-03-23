@@ -5,8 +5,8 @@ from collections.abc import Callable
 
 import pytest
 
-from cli_orchestrator_ui.broker.engine import BrokerEngine
-from cli_orchestrator_ui.broker.models import BrokerEvent
+from cli_runner.broker.engine import BrokerEngine
+from cli_runner.broker.models import BrokerEvent
 
 
 @pytest.fixture

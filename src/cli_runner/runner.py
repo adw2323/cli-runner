@@ -7,8 +7,8 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from cli_orchestrator_ui.broker.engine import _resolve_command, derive_state_from_output
-from cli_orchestrator_ui.broker.models import RunState
+from cli_runner.broker.engine import _resolve_command, derive_state_from_output
+from cli_runner.broker.models import RunState
 
 
 _RUN_STATUS_RE = re.compile(r"^\s*run_status\s*:\s*(done|continue|rework)\s*$", re.IGNORECASE | re.MULTILINE)

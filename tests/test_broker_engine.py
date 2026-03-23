@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
-from cli_orchestrator_ui.broker.engine import BrokerEngine
-from cli_orchestrator_ui.broker.models import RunState, TaskMode
+from cli_runner.broker.engine import BrokerEngine
+from cli_runner.broker.models import RunState, TaskMode
 
 
 @pytest.fixture
@@ -77,7 +77,7 @@ def test_auto_continue_defaults_to_on(events, monkeypatch: pytest.MonkeyPatch) -
 
 
 @pytest.mark.asyncio
-@patch("cli_orchestrator_ui.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
+@patch("cli_runner.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
 async def test_start_file_not_found(mock_exec, events) -> None:
     collected, sink = events
     mock_exec.side_effect = FileNotFoundError()
@@ -89,7 +89,7 @@ async def test_start_file_not_found(mock_exec, events) -> None:
 
 
 @pytest.mark.asyncio
-@patch("cli_orchestrator_ui.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
+@patch("cli_runner.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
 async def test_start_codex_binary_uses_stdin_session_command(mock_exec, events) -> None:
     _, sink = events
     mock_exec.return_value = _SpawnedProcess()
@@ -227,7 +227,7 @@ def test_auto_continue_skips_on_stopped_state(events) -> None:
 
 
 @pytest.mark.asyncio
-@patch("cli_orchestrator_ui.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
+@patch("cli_runner.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
 async def test_start_os_error(mock_exec, events) -> None:
     collected, sink = events
     mock_exec.side_effect = OSError("boom")
@@ -302,7 +302,7 @@ async def test_escalate_updates_summary(events) -> None:
 
 
 @pytest.mark.asyncio
-@patch("cli_orchestrator_ui.broker.engine.asyncio.sleep", new_callable=AsyncMock)
+@patch("cli_runner.broker.engine.asyncio.sleep", new_callable=AsyncMock)
 async def test_retry_calls_start_again(_mock_sleep, events) -> None:
     _, sink = events
     broker = BrokerEngine(sink=sink)
@@ -430,7 +430,7 @@ async def test_start_records_memory_run(events) -> None:
     _, sink = events
     broker = BrokerEngine(sink=sink, codex_cmd=["codex"])
     broker._codex_mem.queue_add_run = Mock()  # type: ignore[method-assign]
-    with patch("cli_orchestrator_ui.broker.engine.asyncio.create_subprocess_exec", new=AsyncMock(return_value=_SpawnedProcess())):
+    with patch("cli_runner.broker.engine.asyncio.create_subprocess_exec", new=AsyncMock(return_value=_SpawnedProcess())):
         broker._send_stdin = AsyncMock()  # type: ignore[method-assign]
         await broker.start("task", TaskMode.CODEX_ONLY)
     broker._codex_mem.queue_add_run.assert_called()  # type: ignore[attr-defined]
@@ -494,7 +494,7 @@ def test_init_log_dir_honors_env_override(monkeypatch: pytest.MonkeyPatch, tmp_p
 
 def test_detect_git_branch_returns_unknown_on_nonzero(monkeypatch: pytest.MonkeyPatch) -> None:
     result = Mock(returncode=1, stdout="")
-    monkeypatch.setattr("cli_orchestrator_ui.broker.engine.subprocess.run", Mock(return_value=result))
+    monkeypatch.setattr("cli_runner.broker.engine.subprocess.run", Mock(return_value=result))
     assert BrokerEngine._detect_git_branch(Path.cwd()) == "unknown"
 
 
@@ -550,7 +550,7 @@ async def test_request_completion_gate_cancelled_clears_pending(events, monkeypa
     async def cancelled_sleep(_seconds: float) -> None:
         raise asyncio.CancelledError()
 
-    monkeypatch.setattr("cli_orchestrator_ui.broker.engine.asyncio.sleep", cancelled_sleep)
+    monkeypatch.setattr("cli_runner.broker.engine.asyncio.sleep", cancelled_sleep)
     await broker._request_completion_gate_after_delay()
     assert broker._completion_gate_pending is False
 

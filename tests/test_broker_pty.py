@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from cli_orchestrator_ui.broker.engine import BrokerEngine
-from cli_orchestrator_ui.broker.models import RunState, TaskMode
+from cli_runner.broker.engine import BrokerEngine
+from cli_runner.broker.models import RunState, TaskMode
 
 
 class _FakePty:
@@ -84,7 +84,7 @@ async def test_send_stdin_uses_pty_write(monkeypatch: pytest.MonkeyPatch, events
 
 
 @pytest.mark.asyncio
-@patch("cli_orchestrator_ui.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
+@patch("cli_runner.broker.engine.asyncio.create_subprocess_exec", new_callable=AsyncMock)
 async def test_start_uses_pty_path_when_forced(mock_exec, monkeypatch: pytest.MonkeyPatch, events) -> None:
     monkeypatch.setenv("BROKER_PTY", "1")
     collected, sink = events

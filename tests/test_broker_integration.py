@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from cli_orchestrator_ui.broker.engine import BrokerEngine
-from cli_orchestrator_ui.broker.models import AgentName, BrokerEvent, RunState, TaskMode
+from cli_runner.broker.engine import BrokerEngine
+from cli_runner.broker.models import AgentName, BrokerEvent, RunState, TaskMode
 
 
 FIXTURE = Path(__file__).parent / "fixtures" / "fake_agent.py"

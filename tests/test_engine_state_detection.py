@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from cli_orchestrator_ui.broker.engine import _resolve_command, derive_state_from_output, is_terminal_completion_signal, strip_ansi
-from cli_orchestrator_ui.broker.models import RunState
+from cli_runner.broker.engine import _resolve_command, derive_state_from_output, is_terminal_completion_signal, strip_ansi
+from cli_runner.broker.models import RunState
 
 
 @pytest.mark.parametrize(

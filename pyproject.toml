@@ -20,8 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-cli-runner = "cli_orchestrator_ui.main:main"
-codex-runner = "cli_orchestrator_ui.main:main"
+cli-runner = "cli_runner.main:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -32,4 +31,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-addopts = "--cov=src/cli_orchestrator_ui/broker --cov-report=term-missing --cov-fail-under=90"
+addopts = "--cov=src/cli_runner/broker --cov-report=term-missing --cov-fail-under=90"

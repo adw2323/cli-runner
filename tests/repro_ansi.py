@@ -1,8 +1,8 @@
 from __future__ import annotations
 import asyncio
 from unittest.mock import MagicMock
-from cli_orchestrator_ui.broker.engine import BrokerEngine
-from cli_orchestrator_ui.broker.models import AgentName, BrokerEvent
+from cli_runner.broker.engine import BrokerEngine
+from cli_runner.broker.models import AgentName, BrokerEvent
 
 def test_ansi_leaking():
     events = []

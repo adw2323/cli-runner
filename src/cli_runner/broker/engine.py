@@ -12,8 +12,8 @@ from collections.abc import Callable, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 
-from cli_orchestrator_ui.broker.codexmem import CodexMemBridge
-from cli_orchestrator_ui.broker.models import AgentName, BrokerEvent, BrokerStatus, RunState, TaskMode
+from cli_runner.broker.codexmem import CodexMemBridge
+from cli_runner.broker.models import AgentName, BrokerEvent, BrokerStatus, RunState, TaskMode
 
 
 EventSink = Callable[[BrokerEvent], None]

@@ -20,11 +20,6 @@ python -m pip install -e .[dev]
 cli-runner "continue working on the project"
 ```
 
-Or:
-```powershell
-codex-runner "continue working on the project"
-```
-
 ## Key Options
 - `--max-loops` (default `50`, or `RUNNER_MAX_LOOPS`)
 - `--strict-completion` / `--no-strict-completion` (default on, or `RUNNER_STRICT_COMPLETION`)

@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 
-from cli_orchestrator_ui.runner import run_task_loop
+from cli_runner.runner import run_task_loop
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -15,7 +15,7 @@ def _env_bool(name: str, default: bool) -> bool:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Codex orchestrator wrapper.")
+    parser = argparse.ArgumentParser(description="CLI runner wrapper.")
     parser.add_argument("--max-loops", type=int, default=int(os.environ.get("RUNNER_MAX_LOOPS", "50")))
     parser.add_argument("--codex-cmd", default=os.environ.get("CODEX_RUNNER_CMD", "codex exec"))
     parser.add_argument(
