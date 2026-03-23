@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cli-runner"
+version = "0.1.0"
+description = "Deterministic Codex runner with loop/status control for project execution."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "pywinpty>=3.0.3; platform_system == 'Windows'",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-asyncio>=0.23.0",
+  "pytest-cov>=5.0.0",
+]
+
+[project.scripts]
+cli-runner = "cli_orchestrator_ui.main:main"
+codex-runner = "cli_orchestrator_ui.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "--cov=src/cli_orchestrator_ui/broker --cov-report=term-missing --cov-fail-under=90"
