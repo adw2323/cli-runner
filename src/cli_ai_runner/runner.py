@@ -90,7 +90,7 @@ def _infer_status_from_output(text: str) -> str:
         state = derive_state_from_output(line, state)
     if state == RunState.DONE:
         return "done"
-    if state in {RunState.INCOMPLETE, RunState.BLOCKED, RunState.PAUSED}:
+    if state in {RunState.RUNNING, RunState.INCOMPLETE, RunState.BLOCKED, RunState.PAUSED}:
         return "continue"
     return "rework"
 
