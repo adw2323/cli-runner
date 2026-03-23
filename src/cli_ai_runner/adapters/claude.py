@@ -17,7 +17,7 @@ class ClaudeAdapter(AgentAdapter):
 
     def build_invocation(self, prompt: str, resolved_cmd: list[str]) -> InvocationSpec:
         return InvocationSpec(
-            argv=[*resolved_cmd, prompt],
+            argv=[*resolved_cmd, "-p", prompt],
             env_overrides={}
         )
 

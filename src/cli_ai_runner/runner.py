@@ -108,6 +108,8 @@ def _run_agent_once(spec: InvocationSpec) -> tuple[int, str]:
         errors="replace",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+        stdin=subprocess.DEVNULL,
+        shell=True,
         bufsize=1,
     )
     if proc.stdout is None:
