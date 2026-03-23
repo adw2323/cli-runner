@@ -100,38 +100,10 @@ def _run_agent_once(spec: InvocationSpec) -> tuple[int, str]:
     if spec.env_overrides:
         env.update(spec.env_overrides)
 
-    # On Windows, use pywinpty to provide a real terminal environment.
-    # This prevents "AttachConsole failed" errors in Node-based CLIs.
-    if os.name == "nt":
-        try:
-            from winpty import PtyProcess
-            import shutil
-
-            # Join argv for cmd.exe
-            cmd_line = " ".join(shlex.quote(arg) for arg in spec.argv)
-            
-            # We need to run inside a shell to handle .cmd/.bat correctly with winpty
-            shell_cmd = f'cmd.exe /C "{cmd_line}"'
-            
-            proc = PtyProcess.spawn(shell_cmd, env=env)
-            chunks: list[str] = []
-            
-            while proc.isalive():
-                try:
-                    # Read in small bursts to keep it responsive
-                    output = proc.read(4096)
-                    if output:
-                        clean = strip_ansi(output)
-                        print(clean, end="", flush=True)
-                        chunks.append(clean)
-                except EOFError:
-                    break
-            
-            return_code = proc.getexitstatus()
-            return return_code, "".join(chunks)
-        except ImportError:
-            # Fallback to standard subprocess if pywinpty isn't available
-            pass
+    # Hygiene: Tell the agent it's in a dumb terminal to prevent PTY attachment attempts
+    env["TERM"] = "dumb"
+    env["NO_COLOR"] = "1"
+    env["FORCE_COLOR"] = "0"
 
     proc = subprocess.Popen(
         spec.argv,
