@@ -1,6 +1,6 @@
 from __future__ import annotations
 import pytest
-from cli_runner.broker.engine import strip_ansi
+from cli_runner.utils import strip_ansi
 
 def test_strip_ansi_colors():
     raw = "\x1b[31mRed Text\x1b[0m"

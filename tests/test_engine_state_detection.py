@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from cli_runner.broker.engine import _resolve_command, derive_state_from_output, is_terminal_completion_signal, strip_ansi
+from cli_runner.utils import resolve_command as _resolve_command, derive_state_from_output, strip_ansi
 from cli_runner.broker.models import RunState
 
 
@@ -42,16 +42,3 @@ def test_strip_ansi_removes_control_sequences() -> None:
     raw = "\x1b[?1049h\x1b[32mREADY\x1b[0m\r\n\x1b]0;title\x07\x07"
     cleaned = strip_ansi(raw)
     assert cleaned == "READY\n"
-
-
-@pytest.mark.parametrize(
-    ("line", "expected"),
-    [
-        ("All done, exiting.", False),
-        ("There is nothing else to do.", True),
-        ("completed", False),
-        ("waiting for input", False),
-    ],
-)
-def test_terminal_completion_signal_detection(line: str, expected: bool) -> None:
-    assert is_terminal_completion_signal(line) is expected

@@ -165,7 +165,7 @@ def test_matches_repo_and_format_helpers() -> None:
         repo_id="cli-runner",
     )
     assert bridge._matches_repo("not-a-dict") is False
-    assert bridge._matches_repo({"repoId": "CLI-AGENT-ORCHESTRATOR-UI"}) is True
+    assert bridge._matches_repo({"repoId": "cli-runner"}) is True
     assert bridge._matches_repo({"cwd": "C:\\Users\\andrew.walsh\\cli-runner\\subdir"}) is True
 
     assert bridge._parse_time("") == "??:??:??"

@@ -7,9 +7,10 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from cli_runner.broker.engine import _resolve_command, derive_state_from_output
+from cli_runner.adapters.base import AgentAdapter, InvocationSpec
+from cli_runner.broker.codexmem import CodexMemBridge
 from cli_runner.broker.models import RunState
-
+from cli_runner.utils import derive_state_from_output, strip_ansi
 
 _RUN_STATUS_RE = re.compile(r"^\s*run_status\s*:\s*(done|continue|rework)\s*$", re.IGNORECASE | re.MULTILINE)
 _RUN_STATUS_INSTRUCTION = (
@@ -66,10 +67,6 @@ class CompletionCheck:
     validation_run: str | None
 
 
-def _parse_cmd(raw: str) -> list[str]:
-    return shlex.split(raw, posix=False)
-
-
 def _ensure_run_status_instruction(task_text: str) -> str:
     trimmed = task_text.strip()
     if "run_status:" in trimmed.lower():
@@ -98,9 +95,14 @@ def _infer_status_from_output(text: str) -> str:
     return "rework"
 
 
-def _run_codex_once(cmd: list[str], prompt: str) -> tuple[int, str]:
+def _run_agent_once(spec: InvocationSpec) -> tuple[int, str]:
+    env = os.environ.copy()
+    if spec.env_overrides:
+        env.update(spec.env_overrides)
+
     proc = subprocess.Popen(
-        [*cmd, prompt],
+        spec.argv,
+        env=env,
         text=True,
         encoding="utf-8",
         errors="replace",
@@ -109,12 +111,14 @@ def _run_codex_once(cmd: list[str], prompt: str) -> tuple[int, str]:
         bufsize=1,
     )
     if proc.stdout is None:
-        raise RuntimeError("Failed to capture codex process output stream.")
+        raise RuntimeError("Failed to capture process output stream.")
 
     chunks: list[str] = []
     for line in proc.stdout:
-        print(line, end="")
-        chunks.append(line)
+        # Strip ANSI for local display and chunk accumulation
+        clean_line = strip_ansi(line)
+        print(clean_line, end="")
+        chunks.append(clean_line)
     proc.stdout.close()
     return_code = proc.wait()
     return return_code, "".join(chunks)
@@ -180,14 +184,17 @@ def _completion_check_passes(check: CompletionCheck, targets: CompletionTargets)
 
 def run_task_loop(
     task_text: str,
-    codex_cmd: str | None = None,
+    adapter: AgentAdapter,
     max_loops: int = 8,
     strict_completion: bool = True,
 ) -> RunnerResult:
-    raw_cmd = (codex_cmd or os.environ.get("CODEX_RUNNER_CMD") or "codex exec").strip()
-    cmd = _resolve_command(_parse_cmd(raw_cmd))
+    cmd = adapter.resolve_cmd()
     if not cmd:
-        raise ValueError("CODEX_RUNNER_CMD resolved to an empty command.")
+        raise ValueError(f"Agent '{adapter.name}' resolved to an empty command. Is it installed?")
+
+    # Initialize Memory Bridge
+    repo_id = os.environ.get("CODEXMEM_REPO_ID", "default")
+    mem = CodexMemBridge(cwd=Path.cwd(), repo_id=repo_id)
 
     prompt = _ensure_run_status_instruction(task_text)
     loops = 0
@@ -196,8 +203,18 @@ def run_task_loop(
 
     while True:
         loops += 1
-        return_code, combined_output = _run_codex_once(cmd, prompt)
+        spec = adapter.build_invocation(prompt, cmd)
+        return_code, combined_output = _run_agent_once(spec)
         status = _extract_run_status(combined_output) or _infer_status_from_output(combined_output)
+
+        # Log to memory bridge
+        if mem.enabled:
+            mem.queue_add_run(
+                request=prompt[:200],
+                summary=combined_output[:300],
+                status=status
+            )
+
         if status == "done":
             if strict_completion and not completion_gate_pending:
                 if loops >= max_loops:
